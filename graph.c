@@ -5,9 +5,14 @@ Fuente: http://simplestcodings.blogspot.com/2013/09/graphs.html
 #include <stdlib.h>
 #include "graph.h"
 #include "queue.c"
+#include <stdio.h>
+#include "stack.c"
 
 graph_p dir_graph;
- 
+struct node* head = NULL;
+int num;
+char* name;
+bool mira =true;
 /* Function to create an adjacency list node*/
 adjlist_node_p createNode(int v)
 {
@@ -119,8 +124,80 @@ void displayGraph(graph_p graph)
         printf("NULL\n");
     }
 }
- 
 
+
+
+bool searchAndAssignNode(char * nodeId, pthread_t thread){
+    int i;
+    bool flag = false;
+    for (i = 0; i < dir_graph->num_vertices; i++)
+    {
+        adjlist_node_p adjListPtr = dir_graph->adjListArr[i].head;
+        while (adjListPtr)
+        {
+            if(adjListPtr->nodeId==nodeId){
+                if(adjListPtr->busy==false){
+                    adjListPtr->thread=thread;
+                    adjListPtr->busy=true;
+                }
+                flag = true;
+                break;
+            }
+            adjListPtr = adjListPtr->next;
+        }
+       if (flag == true){
+        break;
+       }
+    }
+    return flag;
+}
+
+bool changeNodeBridgeState(char * nodeId, bool value){
+    int i;
+    bool flag = false;
+    for (i = 0; i < dir_graph->num_vertices; i++)
+    {
+        adjlist_node_p adjListPtr = dir_graph->adjListArr[i].head;
+        while (adjListPtr)
+        {
+            if(adjListPtr->nodeId==nodeId){
+                    adjListPtr->bridge=value;
+                flag = true;
+                break;
+            }
+            adjListPtr = adjListPtr->next;
+        }
+       if (flag == true){
+        break;
+       }
+    }
+    return flag;
+}
+
+bool printCarInfo(char * nodeId){
+    int i;
+    bool flag = false;
+    for (i = 0; i < dir_graph->num_vertices; i++)
+    {
+        adjlist_node_p adjListPtr = dir_graph->adjListArr[i].head;
+        while (adjListPtr)
+        {
+            if(adjListPtr->nodeId==nodeId){
+                printf("%ld\n",  adjListPtr->thread);
+                if(adjListPtr->busy==true){
+                    printf("%ld\n",  adjListPtr->thread);
+                }
+                flag = true;
+                break;
+            }
+            adjListPtr = adjListPtr->next;
+        }
+       if (flag == true){
+        break;
+       }
+    }
+    return flag;
+}
 
 void makeEdges(){
     dir_graph = createGraph(567, DIRECTED);
@@ -327,7 +404,7 @@ void makeEdges(){
     addEdge(dir_graph, searchNumByName ("_L9"), searchNumByName ("_L10"));
     addEdge(dir_graph, searchNumByName ("_L9"), searchNumByName ("_M10"));
     addEdge(dir_graph, searchNumByName ("_M9"), searchNumByName ("_L10"));
-    addEdge(dir_graph, searchNumByName ("_M9"), searchNumByName ("_M1"));
+    addEdge(dir_graph, searchNumByName ("_M9"), searchNumByName ("_M10"));
     addEdge(dir_graph, searchNumByName ("_L10"), searchNumByName ("_L11"));
     addEdge(dir_graph, searchNumByName ("_L10"), searchNumByName ("_M11"));
     addEdge(dir_graph, searchNumByName ("_M10"), searchNumByName ("_L11"));
@@ -845,8 +922,8 @@ void makeEdges(){
     addEdge(dir_graph, searchNumByName ("_D30"), searchNumByName ("_D29"));
     addEdge(dir_graph, searchNumByName ("_D29"), searchNumByName ("L2"));
     addEdge(dir_graph, searchNumByName ("_D29"), searchNumByName ("K3"));
-    addEdge(dir_graph, searchNumByName ("_L2"), searchNumByName ("_D28"));
-    addEdge(dir_graph, searchNumByName ("_K3"), searchNumByName ("_D28"));
+    addEdge(dir_graph, searchNumByName ("L2"), searchNumByName ("_D28"));
+    addEdge(dir_graph, searchNumByName ("K3"), searchNumByName ("_D28"));
     addEdge(dir_graph, searchNumByName ("_D28"), searchNumByName ("_D27"));
     addEdge(dir_graph, searchNumByName ("_D27"), searchNumByName ("_D26"));
     addEdge(dir_graph, searchNumByName ("_D26"), searchNumByName ("_D25"));
@@ -983,26 +1060,81 @@ void makeEdges(){
     addEdge(dir_graph, searchNumByName ("_B4"), searchNumByName ("_B3"));
     addEdge(dir_graph, searchNumByName ("_B3"), searchNumByName ("_B2"));
     addEdge(dir_graph, searchNumByName ("_B2"), searchNumByName ("_B1"));
-    addEdge(dir_graph, searchNumByName ("_B1"), searchNumByName ("A2"));
+    addEdge(dir_graph, searchNumByName ("_B1"), searchNumByName ("A2"));  
+}
 
-
+void printGraph(){
     printf("\nDIRECTED GRAPH");
     displayGraph(dir_graph);
     destroyGraph(dir_graph);
-
 }
 
 void moveOneNode(){
 
 }
 
+void search(char* nodeId){
+    
+int i;
+    bool flag = false;
+    for (i = 0; i < dir_graph->num_vertices; i++)
+    {
+        adjlist_node_p adjListPtr = dir_graph->adjListArr[i].head;
+        while (adjListPtr)
+        {
+            if(adjListPtr->nodeId==nodeId){
+                printf("%d\n",adjListPtr->vertex);
+                num= adjListPtr->vertex;
+                flag = true;
+                break;
+            }
+            adjListPtr = adjListPtr->next;
+        }
+       if (flag == true){
+        break;
+       }
+    }
+}
+
+char* searchByNum(){
+      
+            if(dir_graph->adjListArr[num].head!=NULL){
+                adjlist_node_p adjListPtr = dir_graph->adjListArr[num].head;
+                if (adjListPtr->visited == false){
+                    printf("%s\n",adjListPtr->nodeId);
+                name =adjListPtr->nodeId;
+                adjListPtr->visited = true;
+                }else{
+                    mira=false;
+                }
+                
+            }                
+
+}
+
+
+
+
+
 int main()
 {
     fillQueue(); 
     makeEdges();
-    //queue q = 
-    printf("%d\n", size());
-    adjlist_node_p adjListPtr = dir_graph->adjListArr[0].head;
-    printf("%s-> ", adjListPtr->nodeId);
+    struct node* head = NULL;
+    int size; 
+    char* element;
+    int counter = 0;
+    pthread_t temp;
+    name="Y1";
+     head = push(head,name);
+    char * namend = "A4";
+    while(name!=namend && mira){
+        search(name);
+    searchByNum();
+    head = push(head,name);
+    }
+
+    display(head);
+     //printGraph();
     return 0;
 }
