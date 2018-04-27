@@ -18,14 +18,15 @@ static void printing( GtkWidget *widget,GtkWidget *entry ){
 static void callback1( GtkWidget *widget,GtkWidget *entry ){
   const gchar *entry_text;
   entry_text = gtk_entry_get_text (GTK_ENTRY (entry));
-  entry_text1 = (char*)entry_text;
+  //entry_text1 = (char*)entry_text;
   printf ("Entry contents: %s\n", entry_text);
 }
 
 static void callback2( GtkWidget *widget,GtkWidget *entry ){
   const gchar *entry_text;
   entry_text = gtk_entry_get_text (GTK_ENTRY (entry));
-  printf ("Entry contents: %s\n", entry_text);
+  char *temp = entry_text;
+  printf ("Entry contents: %s\n", temp);
 }
 
 static void callback3( GtkWidget *widget,GtkWidget *entry ){
@@ -101,47 +102,47 @@ printf("Voy por aca");
     button5 = gtk_button_new_with_label ("Save");
     buttonQuit = gtk_button_new_with_label ("Quit");
 
-    gtk_grid_attach(table, label1, 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label1, 0, 1, 1, 1);
     gtk_widget_show (label1);
-    gtk_grid_attach (table, entry1, 0, 2, 1, 1);
+    gtk_grid_attach (GTK_GRID(table), entry1, 0, 2, 1, 1);
     gtk_widget_show (entry1);
-    gtk_grid_attach(table, button1, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), button1, 1, 2, 1, 1);
     gtk_widget_show (button1);
     g_signal_connect (button1, "clicked",G_CALLBACK (callback1),entry1);
     //
-    gtk_grid_attach(table, label2, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label2, 0, 3, 1, 1);
     gtk_widget_show (label2);
-    gtk_grid_attach(table, entry2, 0, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), entry2, 0, 4, 1, 1);
     gtk_widget_show (entry2);
-    gtk_grid_attach(table, button2,1, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), button2,1, 4, 1, 1);
     gtk_widget_show (button2);
     g_signal_connect (button2, "clicked",G_CALLBACK (callback2),entry2);
     //
-    gtk_grid_attach(table, label3, 0, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label3, 0, 5, 1, 1);
     gtk_widget_show (label3);
-    gtk_grid_attach(table, entry3, 0, 6, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), entry3, 0, 6, 1, 1);
     gtk_widget_show (entry3);
-    gtk_grid_attach(table, button3,1, 6, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), button3,1, 6, 1, 1);
     gtk_widget_show (button3);
     g_signal_connect (button3, "clicked",G_CALLBACK (callback3),entry3);
     //
-    gtk_grid_attach(table, label4, 0, 7, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label4, 0, 7, 1, 1);
     gtk_widget_show (label4);
-    gtk_grid_attach(table, entry4, 0, 8, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), entry4, 0, 8, 1, 1);
     gtk_widget_show (entry4);
-    gtk_grid_attach(table, button4, 1, 8, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), button4, 1, 8, 1, 1);
     gtk_widget_show (button4);
     g_signal_connect (button4, "clicked",G_CALLBACK (callback4),entry4);
     //
-    gtk_grid_attach(table, label5, 0, 9, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label5, 0, 9, 1, 1);
     gtk_widget_show (label5);
-    gtk_grid_attach(table, entry5, 0, 10, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), entry5, 0, 10, 1, 1);
     gtk_widget_show (entry5);
-    gtk_grid_attach(table, button5,1, 10, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), button5,1, 10, 1, 1);
     gtk_widget_show (button5);
     g_signal_connect (button5, "clicked",G_CALLBACK (callback5),entry5);
     //
-    gtk_grid_attach(table, buttonQuit, 0, 11, 2, 1);
+    gtk_grid_attach(GTK_GRID(table), buttonQuit, 0, 11, 2, 1);
     gtk_widget_show (buttonQuit);
     g_signal_connect (buttonQuit, "clicked",G_CALLBACK (printing), NULL);
     //
